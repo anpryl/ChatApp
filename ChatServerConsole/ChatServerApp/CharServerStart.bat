@@ -1,1 +1,0 @@
-java -jar ChatServer.jar settings.properties

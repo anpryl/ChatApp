@@ -1,8 +1,0 @@
-2014-08-28 22:30:32 INFO  Configurer:37 - Server configuration ended
-2014-08-28 22:30:32 INFO  Configurer:38 - Server configuration: [port=3000, maxUsers=5, messageHistorySize=5, logFilePath=logs/serverLogs.log]
-2014-08-28 22:30:32 INFO  ClientManager:44 - Server started: ServerSocket[addr=0.0.0.0/0.0.0.0,localport=3000]
-2014-08-28 22:30:35 INFO  ClientManager:55 - Closing server
-2014-08-28 22:54:58 INFO  Configurer:37 - Server configuration ended
-2014-08-28 22:54:58 INFO  Configurer:38 - Server configuration: [port=3000, maxUsers=5, messageHistorySize=5, logFilePath=logs/serverLogs.log]
-2014-08-28 22:54:58 INFO  ClientManager:44 - Server started: ServerSocket[addr=0.0.0.0/0.0.0.0,localport=3000]
-2014-08-28 22:55:00 INFO  ClientManager:55 - Closing server
