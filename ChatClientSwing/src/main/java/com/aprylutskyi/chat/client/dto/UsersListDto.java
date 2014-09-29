@@ -24,7 +24,7 @@ public class UsersListDto implements Processable {
             this.users.add(userDto);
         }
     }
-    
+
     public UsersListDto(List<UserDto> users) {
         this.users = users;
     }

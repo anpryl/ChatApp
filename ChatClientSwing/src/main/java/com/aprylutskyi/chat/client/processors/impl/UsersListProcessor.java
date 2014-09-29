@@ -21,7 +21,7 @@ public class UsersListProcessor extends JAXBProcessor<UsersListDto> implements D
     public UsersListProcessor(ConnectionManagerThread connectionManager) {
         this.connectionManager = connectionManager;
     }
-    
+
     @Override
     public void processData(Reader reader) {
         try {

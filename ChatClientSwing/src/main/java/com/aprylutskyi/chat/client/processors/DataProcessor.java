@@ -8,7 +8,7 @@ import java.io.Reader;
 public interface DataProcessor {
 
     void processData(Reader reader);
-    
+
     void sendData(Processable data, DataOutputStream outbound);
-    
+
 }

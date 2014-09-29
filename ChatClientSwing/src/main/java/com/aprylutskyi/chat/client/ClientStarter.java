@@ -5,7 +5,6 @@ import com.aprylutskyi.chat.client.connection.ConnectionManagerThread;
 import com.aprylutskyi.chat.client.controller.ChatController;
 import com.aprylutskyi.chat.client.view.FrameManager;
 
-
 public class ClientStarter {
 
     public void init() {
@@ -15,7 +14,7 @@ public class ClientStarter {
         ChatController chatController = new ChatController(connectionManagerThread, frameManager);
         connectionManagerThread.setChatController(chatController);
         frameManager.setChatController(chatController);
-        
+
         new Thread(connectionManagerThread).start();
         frameManager.init();
     }

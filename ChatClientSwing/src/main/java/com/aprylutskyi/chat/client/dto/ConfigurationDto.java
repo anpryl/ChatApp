@@ -7,7 +7,7 @@ public class ConfigurationDto implements Serializable {
     private static final long serialVersionUID = 9056856499912636668L;
 
     private int port;
-    
+
     private String ipAddress;
 
     public int getPort() {
@@ -58,5 +58,5 @@ public class ConfigurationDto implements Serializable {
     public String toString() {
         return "Connection config [port=" + port + ", ipAddress=" + ipAddress + "]";
     }
-    
+
 }

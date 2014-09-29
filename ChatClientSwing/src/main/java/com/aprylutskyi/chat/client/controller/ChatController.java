@@ -7,9 +7,9 @@ import com.aprylutskyi.chat.client.view.FrameManager;
 public class ChatController {
 
     private ConnectionManagerThread connectionManagerThread;
-    
+
     private FrameManager frameManager;
-    
+
     public ChatController(ConnectionManagerThread connectionManagerThread, FrameManager frameManager) {
         this.connectionManagerThread = connectionManagerThread;
         this.frameManager = frameManager;
@@ -20,7 +20,7 @@ public class ChatController {
     }
 
     public void onConnectionLost() {
-    	frameManager.onErrorFromServer(ErrorDto.DISCONNECTED);
+        frameManager.onErrorFromServer(ErrorDto.DISCONNECTED);
     }
 
     public void transferMessageToView(MessageDto message) {
@@ -45,7 +45,7 @@ public class ChatController {
 
     public void sendMessage(MessageDto messageDto) {
         connectionManagerThread.sendMessage(messageDto);
-        
+
     }
 
 }

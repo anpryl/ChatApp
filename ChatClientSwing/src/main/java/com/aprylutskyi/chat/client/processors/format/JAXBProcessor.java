@@ -15,7 +15,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 
 public abstract class JAXBProcessor<T> implements DataProcessor {
-    
+
     private Unmarshaller unmarshaller;
 
     private Marshaller marshaller;
@@ -23,9 +23,9 @@ public abstract class JAXBProcessor<T> implements DataProcessor {
     public abstract boolean isCorrectType(Object message);
 
     public abstract Logger getLogger();
-    
+
     public abstract String getDataTag();
-    
+
     @Override
     public void sendData(Processable data, DataOutputStream outbound) {
         try {
@@ -45,7 +45,7 @@ public abstract class JAXBProcessor<T> implements DataProcessor {
             getLogger().error("Invalid data format for this processor");
         }
     }
-    
+
     public void marshallObject(Processable data, StringWriter writerForMarhaller) throws InvalidDataFormatException,
             JAXBException {
         if (marshaller == null) {
@@ -58,7 +58,7 @@ public abstract class JAXBProcessor<T> implements DataProcessor {
         }
     }
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({"unchecked"})
     public T unmarshallMessage(Reader reader) throws InvalidDataFormatException, JAXBException {
         if (unmarshaller == null) {
             unmarshaller = JAXBHelper.getJaxbContext().createUnmarshaller();

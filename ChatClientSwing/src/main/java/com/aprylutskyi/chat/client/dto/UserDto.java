@@ -4,14 +4,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "user")
 public class UserDto implements Processable {
-    
+
     private static final long serialVersionUID = -4192945757573509660L;
 
     private String name;
-    
+
     private String status;
-    
-    public UserDto() {}
+
+    public UserDto() {
+    }
 
     public UserDto(String name, String status) {
         this.status = status;
@@ -21,7 +22,7 @@ public class UserDto implements Processable {
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
@@ -70,5 +71,5 @@ public class UserDto implements Processable {
         return "User [status=" + status + ", name=" + name + "]";
     }
 
-    
+
 }

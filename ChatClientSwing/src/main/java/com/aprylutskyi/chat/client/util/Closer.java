@@ -8,7 +8,7 @@ import java.io.IOException;
 public class Closer {
 
     private static final Logger LOGGER = Logger.getLogger(Closer.class);
-    
+
     private Closer() {
     }
 
@@ -17,8 +17,8 @@ public class Closer {
             try {
                 toClose.close();
             } catch (IOException e) {
-               LOGGER.error("Error occured whiel closing stream: " + toClose);
-               LOGGER.debug(e.getMessage());;
+                LOGGER.error("Error occured whiel closing stream: " + toClose);
+                LOGGER.debug(e.getMessage());
             }
         }
     }

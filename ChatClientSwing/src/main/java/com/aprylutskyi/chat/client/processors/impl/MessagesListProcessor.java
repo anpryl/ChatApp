@@ -23,7 +23,7 @@ public class MessagesListProcessor extends JAXBProcessor<MessagesListDto> implem
     public MessagesListProcessor(ConnectionManagerThread connectionManager) {
         this.connectionManager = connectionManager;
     }
-    
+
     @Override
     public void processData(Reader reader) {
         try {

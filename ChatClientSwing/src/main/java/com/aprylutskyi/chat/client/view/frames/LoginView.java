@@ -20,204 +20,193 @@ import java.util.regex.Pattern;
 
 public class LoginView extends JFrame {
 
-	private static final long serialVersionUID = -6037500631291110827L;
+    private static final long serialVersionUID = -6037500631291110827L;
+    private static final String IPADDRESS_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+            + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+            + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+    private FrameManager frameManager;
+    private ViewErrorHandler errorHandler = new ViewErrorHandler();
+    private JTextField loginField;
+    private JSpinner portField;
+    private JFormattedTextField ipAddress;
+    private JTextField errorField;
+    private JButton enterButton;
+    private LoginAction loginAction = new LoginAction();
+    private CloseAction closeAction = new CloseAction();
+    private Pattern ipAddressPattern;
 
-	private FrameManager frameManager;
-	
-	private ViewErrorHandler errorHandler = new ViewErrorHandler();
+    public LoginView(FrameManager frameManager) {
+        this.frameManager = frameManager;
+    }
 
-	private JTextField loginField;
+    public void init() {
+        ipAddressPattern = Pattern.compile(IPADDRESS_PATTERN);
+        setLayout(null);
+        addErrorField();
+        addLoginField();
+        addIpAddressField();
+        addPortField();
+        addErrorField();
+        addButtons();
+        setSize(450, 200);
+        setTitle("Socket chat");
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setResizable(false);
+        addWindowListener(new OnCloseListener());
+    }
 
-	private JSpinner portField;
+    public void onError(ErrorDto error) {
+        setErrorMessage(errorHandler.getErrorMessage(error));
+        enterButton.setEnabled(true);
+    }
 
-	private JFormattedTextField ipAddress;
+    public void setErrorMessage(String error) {
+        errorField.setBackground(Color.ORANGE);
+        errorField.setText(error);
+        enterButton.setEnabled(true);
+    }
 
-	private JTextField errorField;
+    public void setInfoMessage(String info) {
+        errorField.setBackground(Color.GREEN);
+        errorField.setText(info);
+    }
 
-	private JButton enterButton;
+    private void addButtons() {
+        enterButton = new JButton(loginAction);
+        enterButton.setText("Login");
+        enterButton.setBounds(100, 120, 75, 30);
+        add(enterButton);
+        getRootPane().setDefaultButton(enterButton);
 
-	private LoginAction loginAction = new LoginAction();
+        JButton closeButton = new JButton(closeAction);
+        closeButton.setText("Close");
+        closeButton.setBounds(275, 120, 75, 30);
+        add(closeButton);
 
-	private CloseAction closeAction = new CloseAction();
+    }
 
-	private static final String IPADDRESS_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
-			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
-			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+    private void addErrorField() {
+        errorField = new JTextField();
+        errorField.setBorder(BorderFactory.createLineBorder(null, 0));
+        errorField.setEditable(false);
+        errorField.setBounds(100, 10, 250, 25);
+        errorField.setHorizontalAlignment(JTextField.CENTER);
+        add(errorField);
+    }
 
-	private Pattern ipAddressPattern;
+    private void addPortField() {
+        JTextField addressFieldInfo = new JTextField("Port:");
+        addressFieldInfo.setEditable(false);
+        addressFieldInfo.setBounds(280, 80, 37, 25);
+        add(addressFieldInfo);
 
-	public LoginView(FrameManager frameManager) {
-		this.frameManager = frameManager;
-	}
+        portField = new JSpinner(new SpinnerNumberModel(ConfigConstants.DEFAULT_PORT, ConfigConstants.MIN_PORT,
+                ConfigConstants.MAX_PORT, 1));
+        portField.setBounds(317, 80, 70, 25);
+        add(portField);
+    }
 
-	public void init() {
-		ipAddressPattern = Pattern.compile(IPADDRESS_PATTERN);
-		setLayout(null);
-		addErrorField();
-		addLoginField();
-		addIpAddressField();
-		addPortField();
-		addErrorField();
-		addButtons();
-		setSize(450, 200);
-		setTitle("����");
-		setLocationRelativeTo(null);
-		setVisible(true);
-		setResizable(false);
-		addWindowListener(new OnCloseListener());
-	}
+    private void addIpAddressField() {
+        JTextField addressFieldInfo = new JTextField("IP address:");
+        addressFieldInfo.setEditable(false);
+        addressFieldInfo.setBounds(20, 80, 115, 25);
+        add(addressFieldInfo);
 
-	public void onError(ErrorDto error) {
-		setErrorMessage(errorHandler.getErrorMessage(error));
-		enterButton.setEnabled(true);
-	}
+        try {
+            MaskFormatter mf = new MaskFormatter("###.###.###.###");
+            ipAddress = new JFormattedTextField(mf);
+            ipAddress.setText("127.000.000.001");
+        } catch (ParseException e) {
+        }
 
-	public void setErrorMessage(String error) {
-		errorField.setBackground(Color.ORANGE);
-		errorField.setText(error);
-		enterButton.setEnabled(true);
-	}
+        ipAddress.setBounds(135, 80, 115, 25);
+        add(ipAddress);
+    }
 
-	public void setInfoMessage(String info) {
-		errorField.setBackground(Color.GREEN);
-		errorField.setText(info);
-	}
+    private void addLoginField() {
+        JTextField loginFieldInfo = new JTextField("Enter your nick name:");
+        loginFieldInfo.setEditable(false);
+        loginFieldInfo.setBounds(20, 50, 115, 25);
+        add(loginFieldInfo);
 
-	private void addButtons() {
-		enterButton = new JButton(loginAction);
-		enterButton.setText("����");
-		enterButton.setBounds(100, 120, 75, 30);
-		add(enterButton);
-		getRootPane().setDefaultButton(enterButton);
+        loginField = new JTextField();
+        loginField.setBounds(135, 50, 115, 25);
+        add(loginField);
+    }
 
-		JButton closeButton = new JButton(closeAction);
-		closeButton.setText("�����");
-		closeButton.setBounds(275, 120, 75, 30);
-		add(closeButton);
+    public void onConnectionLost() {
+        if (errorField.getText().isEmpty()) {
+            setErrorMessage("Connection lost");
+        }
+    }
 
-	}
+    private class LoginAction extends AbstractAction {
 
-	private void addErrorField() {
-		errorField = new JTextField();
-		errorField.setBorder(BorderFactory.createLineBorder(null, 0));
-		errorField.setEditable(false);
-		errorField.setBounds(100, 10, 250, 25);
-		errorField.setHorizontalAlignment(JTextField.CENTER);
-		add(errorField);
-	}
+        private static final long serialVersionUID = -6806227486866849928L;
 
-	private void addPortField() {
-		JTextField addressFieldInfo = new JTextField("����:");
-		addressFieldInfo.setEditable(false);
-		addressFieldInfo.setBounds(280, 80, 37, 25);
-		add(addressFieldInfo);
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (fieldsValid()) {
+                UserDto owner = new UserDto(loginField.getText(), UserStatus.ONLINE);
+                ConfigurationDto configurationDto = new ConfigurationDto();
+                configurationDto.setIpAddress(ipAddress.getText());
+                configurationDto.setPort((Integer) portField.getValue());
+                setInfoMessage("Connecting...");
+                enterButton.setEnabled(false);
+                EventQueue.invokeLater(new InitialConnecter(owner, configurationDto));
+            }
+        }
 
-		portField = new JSpinner(new SpinnerNumberModel(ConfigConstants.DEFAULT_PORT, ConfigConstants.MIN_PORT,
-				ConfigConstants.MAX_PORT, 1));
-		portField.setBounds(317, 80, 70, 25);
-		add(portField);
-	}
+        private boolean fieldsValid() {
+            String loginName = loginField.getText();
+            if (loginName.trim().isEmpty()) {
+                setErrorMessage("Enter your name");
+                return false;
+            }
+            String ip = ipAddress.getText();
+            Matcher ipMatcher = ipAddressPattern.matcher(ip);
+            if (!ipMatcher.matches()) {
+                setErrorMessage("Invalid ip address");
+                return false;
+            }
+            return true;
+        }
 
-	private void addIpAddressField() {
-		JTextField addressFieldInfo = new JTextField("IP �����:");
-		addressFieldInfo.setEditable(false);
-		addressFieldInfo.setBounds(20, 80, 115, 25);
-		add(addressFieldInfo);
+    }
 
-		try {
-			MaskFormatter mf = new MaskFormatter("###.###.###.###");
-			ipAddress = new JFormattedTextField(mf);
-			ipAddress.setText("127.000.000.001");
-		} catch (ParseException e) {
-		}
+    private class CloseAction extends AbstractAction {
+        private static final long serialVersionUID = 751399255465045671L;
 
-		ipAddress.setBounds(135, 80, 115, 25);
-		add(ipAddress);
-	}
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.exit(-1);
+        }
 
-	private void addLoginField() {
-		JTextField loginFieldInfo = new JTextField("��� ������������:");
-		loginFieldInfo.setEditable(false);
-		loginFieldInfo.setBounds(20, 50, 115, 25);
-		add(loginFieldInfo);
+    }
 
-		loginField = new JTextField();
-		loginField.setBounds(135, 50, 115, 25);
-		add(loginField);
-	}
+    private class OnCloseListener extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            System.exit(-1);
+        }
+    }
 
-	private class LoginAction extends AbstractAction {
+    private class InitialConnecter implements Runnable {
 
-		private static final long serialVersionUID = -6806227486866849928L;
+        private UserDto owner;
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (fieldsValid()) {
-				UserDto owner = new UserDto(loginField.getText(), UserStatus.ONLINE);
-				ConfigurationDto configurationDto = new ConfigurationDto();
-				configurationDto.setIpAddress(ipAddress.getText());
-				configurationDto.setPort((Integer) portField.getValue());
-				setInfoMessage("������������...");
-				enterButton.setEnabled(false);
-				EventQueue.invokeLater(new InitialConnecter(owner, configurationDto));
-			}
-		}
+        private ConfigurationDto config;
 
-		private boolean fieldsValid() {
-			String loginName = loginField.getText();
-			if (loginName.trim().isEmpty()) {
-				setErrorMessage("������ ���");
-				return false;
-			}
-			String ip = ipAddress.getText();
-			Matcher ipMatcher = ipAddressPattern.matcher(ip);
-			if (!ipMatcher.matches()) {
-				setErrorMessage("������� ���������� IP �����");
-				return false;
-			}
-			return true;
-		}
+        public InitialConnecter(UserDto owner, ConfigurationDto config) {
+            this.owner = owner;
+            this.config = config;
+        }
 
-	}
+        @Override
+        public void run() {
+            frameManager.initialConnection(owner, config);
+        }
 
-	private class CloseAction extends AbstractAction {
-		private static final long serialVersionUID = 751399255465045671L;
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.exit(-1);
-		}
-
-	}
-
-	private class OnCloseListener extends WindowAdapter {
-		@Override
-		public void windowClosing(WindowEvent e) {
-			System.exit(-1);
-		}
-	}
-
-	private class InitialConnecter implements Runnable {
-
-		private UserDto owner;
-
-		private ConfigurationDto config;
-
-		public InitialConnecter(UserDto owner, ConfigurationDto config) {
-			this.owner = owner;
-			this.config = config;
-		}
-
-		@Override
-		public void run() {
-			frameManager.initialConnection(owner, config);
-		}
-
-	}
-
-	public void onConnectionLost() {
-		if (errorField.getText().isEmpty()){
-			setErrorMessage("����������� �� �������� ���������");
-		}
-	}
+    }
 }

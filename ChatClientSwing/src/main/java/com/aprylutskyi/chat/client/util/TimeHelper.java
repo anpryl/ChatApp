@@ -14,7 +14,7 @@ public class TimeHelper {
         SimpleDateFormat formatter = new SimpleDateFormat(DataConstants.DATE_FORMAT);
         return formatter.format(date);
     }
-    
+
     public static String getNow() {
         return dateToString(new Date());
     }

@@ -22,7 +22,7 @@ public class ChatView extends JFrame {
     private UserDto user;
 
     private ViewErrorHandler errorHandler = new ViewErrorHandler();
-    
+
     private FrameManager frameManager;
 
     private JMenuBar menuBar;
@@ -42,7 +42,7 @@ public class ChatView extends JFrame {
     private JTextArea onlineUsersList;
 
     private JButton sendButton;
-    
+
     private JTextField errorField;
 
     public ChatView(FrameManager frameManager) {
@@ -51,7 +51,7 @@ public class ChatView extends JFrame {
     }
 
     public void onConnectionLost() {
-        setErrorMessage("���������� ��������");
+        setErrorMessage("Connection lost");
         refreshItem.setEnabled(true);
         sendButton.setEnabled(false);
     }
@@ -69,9 +69,9 @@ public class ChatView extends JFrame {
     }
 
     public void onError(ErrorDto error) {
-    	setErrorMessage(errorHandler.getErrorMessage(error));
-    	sendButton.setEnabled(false);
-		refreshItem.setEnabled(true);
+        setErrorMessage(errorHandler.getErrorMessage(error));
+        sendButton.setEnabled(false);
+        refreshItem.setEnabled(true);
     }
 
     public UserDto getUser() {
@@ -83,20 +83,20 @@ public class ChatView extends JFrame {
     }
 
     public void openInfoTip() {
-        JOptionPane.showMessageDialog(this, "��������� �� �������� ����������, 2014 �.", "�������",
+        JOptionPane.showMessageDialog(this, "Socket chat by Anatolii Prylutskyi, 2014", "Info",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void enableSendButton() {
         sendButton.setEnabled(true);
         refreshItem.setEnabled(false);
-        setInfoMessage("�� ������");
+        setInfoMessage("Send message");
     }
-    
+
     public void clearMessages() {
         messageArea.setText("");
     }
-    
+
     private void init() {
         addWindowListener(new OnCloseListener());
         setLayout(null);
@@ -118,10 +118,10 @@ public class ChatView extends JFrame {
         errorField.setHorizontalAlignment(JTextField.CENTER);
         add(errorField);
     }
-    
+
     private void addMessageField() {
         JTextField chatTitle = new JTextField();
-        chatTitle.setText("������� ����� (��� �������� CTRL+ENTER)");
+        chatTitle.setText("Enter your message (To send message: CTRL+ENTER)");
         chatTitle.setEditable(false);
         chatTitle.setBounds(220, 455, 555, 25);
         chatTitle.setHorizontalAlignment(JTextField.CENTER);
@@ -131,7 +131,7 @@ public class ChatView extends JFrame {
         messageArea.setBounds(220, 480, 430, 75);
         add(messageArea);
         sendButton = new JButton(new SendActionListener());
-        sendButton.setText("���������");
+        sendButton.setText("Send message");
         sendButton.setBounds(650, 480, 120, 75);
         getRootPane().setDefaultButton(sendButton);
         add(sendButton);
@@ -139,7 +139,7 @@ public class ChatView extends JFrame {
 
     private void addChat() {
         JTextField chatTitle = new JTextField();
-        chatTitle.setText("���� ���������");
+        chatTitle.setText("Chat window");
         chatTitle.setEditable(false);
         chatTitle.setBounds(220, 30, 555, 25);
         chatTitle.setHorizontalAlignment(JTextField.CENTER);
@@ -152,7 +152,7 @@ public class ChatView extends JFrame {
 
     private void addOnlineUsersList() {
         JTextField onlineUsers = new JTextField();
-        onlineUsers.setText("������ ������������");
+        onlineUsers.setText("Online users");
         onlineUsers.setEditable(false);
         onlineUsers.setBounds(0, 30, 200, 25);
         onlineUsers.setHorizontalAlignment(JTextField.CENTER);
@@ -168,20 +168,20 @@ public class ChatView extends JFrame {
         menuBar.setBounds(0, 0, 100, 30);
         add(menuBar);
 
-        menu = new JMenu("���");
+        menu = new JMenu("Chat");
         menuBar.add(menu);
 
         refreshItem = new JMenuItem(new RefreshConnectionAction());
         menu.add(refreshItem);
         refreshItem.setEnabled(false);
-        refreshItem.setText("�������� �����������");
+        refreshItem.setText("Reconnect");
 
         exitItem = new JMenuItem(new ExitAction());
-        exitItem.setText("�����");
+        exitItem.setText("Exit");
         menu.add(exitItem);
 
         info = new JMenuItem(new InfoAction());
-        info.setText("�������");
+        info.setText("Info");
         menuBar.add(info);
 
     }
@@ -190,23 +190,23 @@ public class ChatView extends JFrame {
         errorField.setBackground(Color.ORANGE);
         errorField.setText(message);
     }
-    
+
     private void setInfoMessage(String message) {
         errorField.setBackground(Color.GREEN);
         errorField.setText(message);
     }
-    
+
     private String getFormattedMessage(MessageDto message) {
-        String msg = message.getDate() + " " + message.getAuthor() + " : " + message.getText() + "\n"; 
+        String msg = message.getDate() + " " + message.getAuthor() + " : " + message.getText() + "\n";
         return msg;
     }
-    
+
     private class RefreshConnectionAction extends AbstractAction {
         private static final long serialVersionUID = -2017696724533182609L;
 
         @Override
         public void actionPerformed(ActionEvent e) {
-        	setInfoMessage("����������������...");
+            setInfoMessage("Reconnection...");
             EventQueue.invokeLater(new Reconecter());
         }
     }
@@ -240,27 +240,28 @@ public class ChatView extends JFrame {
     }
 
     private class SendActionListener extends AbstractAction {
-		private static final long serialVersionUID = 1688978598538217216L;
-		@Override
+        private static final long serialVersionUID = 1688978598538217216L;
+
+        @Override
         public void actionPerformed(ActionEvent e) {
-        	 String messageText = messageArea.getText().trim();
-             String name = user.getName();
-             messageArea.setText("");
-             if (!messageText.isEmpty()) {
-                 MessageDto messageDto = new MessageDto();
-                 messageDto.setAuthor(name);
-                 messageDto.setDate(TimeHelper.getNow());
-                 messageDto.setText(messageText);
-                 frameManager.sendMessage(messageDto);
-             }
+            String messageText = messageArea.getText().trim();
+            String name = user.getName();
+            messageArea.setText("");
+            if (!messageText.isEmpty()) {
+                MessageDto messageDto = new MessageDto();
+                messageDto.setAuthor(name);
+                messageDto.setDate(TimeHelper.getNow());
+                messageDto.setText(messageText);
+                frameManager.sendMessage(messageDto);
+            }
         }
     }
-    
-    private class Reconecter implements Runnable{
-		@Override
-		public void run() {
-			frameManager.initialConnection();
-		}
-    	
+
+    private class Reconecter implements Runnable {
+        @Override
+        public void run() {
+            frameManager.initialConnection();
+        }
+
     }
 }
