@@ -1,20 +1,12 @@
 package com.aprylutskyi.chat.server.processors;
 
-import static com.aprylutskyi.chat.server.constants.DataConstants.ERROR_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.MESSAGE_HISTORY_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.MESSAGE_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.ONLINE_USERS_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.USER_TAG;
+import com.aprylutskyi.chat.server.connection.ClientThread;
+import com.aprylutskyi.chat.server.processors.impl.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.aprylutskyi.chat.server.connection.ClientThread;
-import com.aprylutskyi.chat.server.processors.impl.ErrorProcessor;
-import com.aprylutskyi.chat.server.processors.impl.MessageProcessor;
-import com.aprylutskyi.chat.server.processors.impl.MessagesListProcessor;
-import com.aprylutskyi.chat.server.processors.impl.UserProcessor;
-import com.aprylutskyi.chat.server.processors.impl.UsersListProcessor;
+import static com.aprylutskyi.chat.server.constants.DataConstants.*;
 
 public class ProcessorsFactory {
 

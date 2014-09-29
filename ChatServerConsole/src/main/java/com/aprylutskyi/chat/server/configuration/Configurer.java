@@ -1,24 +1,14 @@
 package com.aprylutskyi.chat.server.configuration;
 
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.DEFAULT_LOG_FILE_PATH;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.DEFAULT_MAX_USERS;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.DEFAULT_MESSAGE_HISTORY_SIZE;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.DEFAULT_PORT;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.LOG_FILE_PATH_KEY;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.MAX_PORT;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.MAX_USERS_KEY;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.MESSAGE_HISTORY_SIZE_KEY;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.MIN_PORT;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.PORT_KEY;
+import com.aprylutskyi.chat.server.dto.ConfigurationDto;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
-import com.aprylutskyi.chat.server.dto.ConfigurationDto;
+import static com.aprylutskyi.chat.server.constants.ConfigConstants.*;
 
 public class Configurer {
 

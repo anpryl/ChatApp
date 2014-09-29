@@ -1,26 +1,17 @@
 package com.aprylutskyi.chat.server.processors.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.StringReader;
-
-import javax.xml.bind.Unmarshaller;
-
+import com.aprylutskyi.chat.server.constants.DataConstants;
+import com.aprylutskyi.chat.server.dto.MessageDto;
+import com.aprylutskyi.chat.server.util.JAXBHelper;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.xml.sax.InputSource;
 
-import com.aprylutskyi.chat.server.constants.DataConstants;
-import com.aprylutskyi.chat.server.dto.MessageDto;
-import com.aprylutskyi.chat.server.processors.impl.MessageProcessor;
-import com.aprylutskyi.chat.server.util.JAXBHelper;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MessageProcessorTest extends AbstractProcessorTest {
 

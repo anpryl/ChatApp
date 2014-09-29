@@ -1,15 +1,15 @@
 package com.aprylutskyi.chat.server.connection.holders;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.aprylutskyi.chat.server.connection.ClientThread;
 import com.aprylutskyi.chat.server.constants.UserStatus;
 import com.aprylutskyi.chat.server.dto.MessageDto;
 import com.aprylutskyi.chat.server.dto.UserDto;
 import com.aprylutskyi.chat.server.dto.UsersListDto;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ClientThreadsHolder {
 
@@ -35,7 +35,7 @@ public class ClientThreadsHolder {
         synchronized (clientThreads) {
             for (ClientThread clientThread : clientThreads) {
                 UserDto user = clientThread.getOwner();
-                if(user.getName().equals(userToKill)){
+                if (user.getName().equals(userToKill)) {
                     clientThread.closeServerConnection();
                     remove(clientThread);
                     return true;
@@ -44,7 +44,7 @@ public class ClientThreadsHolder {
             return false;
         }
     }
-    
+
     public void remove(ClientThread clientThread) {
         synchronized (clientThreads) {
             clientThreads.remove(clientThread);
@@ -53,7 +53,7 @@ public class ClientThreadsHolder {
 
     public void removeAll() {
         synchronized (clientThreads) {
-            for (Iterator<ClientThread> iterator = clientThreads.iterator(); iterator.hasNext();) {
+            for (Iterator<ClientThread> iterator = clientThreads.iterator(); iterator.hasNext(); ) {
                 ClientThread clientThread = iterator.next();
                 iterator.remove();
                 clientThread.closeServerConnection();

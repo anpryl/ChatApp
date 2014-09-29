@@ -1,31 +1,28 @@
 package com.aprylutskyi.chat.server.dto;
 
+import com.aprylutskyi.chat.server.constants.ErrorType;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.aprylutskyi.chat.server.constants.ErrorType;
 
 @XmlRootElement(name = "error")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ErrorDto implements Processable {
 
+    public static final ErrorDto USER_LIMIT = new ErrorDto(ErrorType.USER_LIMIT);
+    public static final ErrorDto OFFLINE = new ErrorDto(ErrorType.OFFLINE);
+    public static final ErrorDto INVALID_NAME = new ErrorDto(ErrorType.INVALID_NAME);
     private static final long serialVersionUID = 8532221407891356226L;
-
     private String errorType;
 
-    private ErrorDto() {}
+    private ErrorDto() {
+    }
 
     private ErrorDto(String errorType) {
         this.errorType = errorType;
     }
 
-    public static final ErrorDto USER_LIMIT = new ErrorDto(ErrorType.USER_LIMIT);
-    
-    public static final ErrorDto OFFLINE = new ErrorDto(ErrorType.OFFLINE);
-    
-    public static final ErrorDto INVALID_NAME = new ErrorDto(ErrorType.INVALID_NAME);
-    
     public String getErrorType() {
         return errorType;
     }

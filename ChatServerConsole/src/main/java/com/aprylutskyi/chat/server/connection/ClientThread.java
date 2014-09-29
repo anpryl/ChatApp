@@ -1,30 +1,16 @@
 package com.aprylutskyi.chat.server.connection;
 
-import static com.aprylutskyi.chat.server.constants.DataConstants.ERROR_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.MESSAGE_HISTORY_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.MESSAGE_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.ONLINE_USERS_TAG;
-
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.net.Socket;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-
-import com.aprylutskyi.chat.server.dto.ErrorDto;
-import com.aprylutskyi.chat.server.dto.MessageDto;
-import com.aprylutskyi.chat.server.dto.MessagesListDto;
-import com.aprylutskyi.chat.server.dto.Processable;
-import com.aprylutskyi.chat.server.dto.UserDto;
-import com.aprylutskyi.chat.server.dto.UsersListDto;
+import com.aprylutskyi.chat.server.dto.*;
 import com.aprylutskyi.chat.server.processors.DataProcessor;
 import com.aprylutskyi.chat.server.processors.ProcessorsFactory;
 import com.aprylutskyi.chat.server.util.Closer;
+import org.apache.log4j.Logger;
+
+import java.io.*;
+import java.net.Socket;
+import java.util.Map;
+
+import static com.aprylutskyi.chat.server.constants.DataConstants.*;
 
 public class ClientThread implements Runnable {
 
@@ -103,7 +89,7 @@ public class ClientThread implements Runnable {
             clientManager.sendOnlineUserListToAll();
         }
     }
-    
+
     public void sendOnlineUserList(UsersListDto onlineUsers) {
         sendData(ONLINE_USERS_TAG, onlineUsers);
     }
@@ -145,7 +131,7 @@ public class ClientThread implements Runnable {
         MessagesListDto messageHistory = clientManager.getMessageHistory();
         sendData(MESSAGE_HISTORY_TAG, messageHistory);
     }
-    
+
     private void processData(String tag, Reader reader) {
         LOGGER.info("Processing data with tag: " + tag);
         DataProcessor dataProcessor = dataProcessors.get(tag);

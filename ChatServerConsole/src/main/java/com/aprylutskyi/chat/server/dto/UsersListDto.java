@@ -1,12 +1,11 @@
 package com.aprylutskyi.chat.server.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlRootElement(name = "users")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -25,7 +24,7 @@ public class UsersListDto implements Processable {
             this.users.add(userDto);
         }
     }
-    
+
     public UsersListDto(List<UserDto> users) {
         this.users = users;
     }

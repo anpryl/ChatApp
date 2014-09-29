@@ -1,14 +1,14 @@
 package com.aprylutskyi.chat.server.util;
 
+import org.apache.log4j.Logger;
+
 import java.io.Closeable;
 import java.io.IOException;
-
-import org.apache.log4j.Logger;
 
 public class Closer {
 
     private static final Logger LOGGER = Logger.getLogger(Closer.class);
-    
+
     private Closer() {
     }
 
@@ -17,8 +17,9 @@ public class Closer {
             try {
                 toClose.close();
             } catch (IOException e) {
-               LOGGER.error("Error occured whiel closing stream: " + toClose);
-               LOGGER.debug(e.getMessage());;
+                LOGGER.error("Error occured whiel closing stream: " + toClose);
+                LOGGER.debug(e.getMessage());
+                ;
             }
         }
     }

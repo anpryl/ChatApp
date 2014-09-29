@@ -1,7 +1,10 @@
 package com.aprylutskyi.chat.server.connection.holders;
 
-import static org.junit.Assert.*;
-
+import com.aprylutskyi.chat.server.connection.ClientThread;
+import com.aprylutskyi.chat.server.constants.UserStatus;
+import com.aprylutskyi.chat.server.dto.MessageDto;
+import com.aprylutskyi.chat.server.dto.UserDto;
+import com.aprylutskyi.chat.server.dto.UsersListDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,136 +13,126 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.aprylutskyi.chat.server.connection.ClientThread;
-import com.aprylutskyi.chat.server.connection.holders.ClientThreadsHolder;
-import com.aprylutskyi.chat.server.constants.UserStatus;
-import com.aprylutskyi.chat.server.dto.MessageDto;
-import com.aprylutskyi.chat.server.dto.UserDto;
-import com.aprylutskyi.chat.server.dto.UsersListDto;
+import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ClientThread.class)
 public class ClientThreadsHolderTest {
 
-	private final int TEST_SIZE = 2;
+    public static final ClientThread mockedClientThread1 = PowerMockito.mock(ClientThread.class);
+    public static final ClientThread mockedClientThread2 = PowerMockito.mock(ClientThread.class);
+    public static final ClientThread mockedClientThread3 = PowerMockito.mock(ClientThread.class);
+    private final int TEST_SIZE = 2;
+    private ClientThreadsHolder holder = new ClientThreadsHolder(TEST_SIZE);
+    private final UserDto testUser1 = new UserDto("Test1", UserStatus.ONLINE);
 
-	private ClientThreadsHolder holder = new ClientThreadsHolder(TEST_SIZE);
+    private final UserDto testUser2 = new UserDto("Test2", UserStatus.ONLINE);
 
-	public static final ClientThread mockedClientThread1 = PowerMockito.mock(ClientThread.class);
+    private final UserDto testUser3 = new UserDto("Test3", UserStatus.ONLINE);
 
-	public static final ClientThread mockedClientThread2 = PowerMockito.mock(ClientThread.class);
+    @Before
+    public void before() {
+        Mockito.reset(mockedClientThread1, mockedClientThread2, mockedClientThread3);
+    }
 
-	public static final ClientThread mockedClientThread3 = PowerMockito.mock(ClientThread.class);
+    @Test
+    public void addSizeTest() {
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
+        Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
+        Mockito.when(mockedClientThread3.getOwner()).thenReturn(testUser3);
 
-	private final UserDto testUser1 = new UserDto("Test1", UserStatus.ONLINE);
+        holder.add(mockedClientThread1);
+        holder.add(mockedClientThread2);
+        holder.add(mockedClientThread3);
+        assertEquals(TEST_SIZE, holder.size());
+        Mockito.verify(mockedClientThread3).onUserLimitError();
+    }
 
-	private final UserDto testUser2 = new UserDto("Test2", UserStatus.ONLINE);
+    @Test
+    public void addErrorNullOwnerTest() {
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(null);
+        assertFalse(holder.add(mockedClientThread1));
+    }
 
-	private final UserDto testUser3 = new UserDto("Test3", UserStatus.ONLINE);
+    @Test
+    public void addErrorInvalidNameOwnerTest() {
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(new UserDto(" ", UserStatus.ONLINE));
+        holder.add(mockedClientThread1);
+        Mockito.verify(mockedClientThread1).onInvalidNameError();
+    }
 
-	@Before
-	public void before() {
-		Mockito.reset(mockedClientThread1, mockedClientThread2, mockedClientThread3);
-	}
+    @Test
+    public void addErrorOfflineUserTest() {
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(new UserDto("TestName", UserStatus.OFFLINE));
+        assertFalse(holder.add(mockedClientThread1));
+    }
 
-	@Test
-	public void addSizeTest() {
-		Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
-		Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
-		Mockito.when(mockedClientThread3.getOwner()).thenReturn(testUser3);
+    @Test
+    public void addErrorEqualsNameTest() {
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(new UserDto("TestName", UserStatus.ONLINE));
+        Mockito.when(mockedClientThread2.getOwner()).thenReturn(new UserDto("TestName", UserStatus.ONLINE));
+        holder.add(mockedClientThread1);
+        holder.add(mockedClientThread2);
 
-		holder.add(mockedClientThread1);
-		holder.add(mockedClientThread2);
-		holder.add(mockedClientThread3);
-		assertEquals(TEST_SIZE, holder.size());
-		Mockito.verify(mockedClientThread3).onUserLimitError();
-	}
+        assertEquals(1, holder.size());
+        Mockito.verify(mockedClientThread2).onInvalidNameError();
+    }
 
-	@Test
-	public void addErrorNullOwnerTest() {
-		Mockito.when(mockedClientThread1.getOwner()).thenReturn(null);
-		assertFalse(holder.add(mockedClientThread1));
-	}
+    @Test
+    public void removeAllTest() throws Exception {
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
+        Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
 
-	@Test
-	public void addErrorInvalidNameOwnerTest() {
-		Mockito.when(mockedClientThread1.getOwner()).thenReturn(new UserDto(" ", UserStatus.ONLINE));
-		holder.add(mockedClientThread1);
-		Mockito.verify(mockedClientThread1).onInvalidNameError();
-	}
+        holder.add(mockedClientThread1);
+        holder.add(mockedClientThread2);
+        holder.removeAll();
+        assertEquals(0, holder.size());
 
-	@Test
-	public void addErrorOfflineUserTest() {
-		Mockito.when(mockedClientThread1.getOwner()).thenReturn(new UserDto("TestName", UserStatus.OFFLINE));
-		assertFalse(holder.add(mockedClientThread1));
-	}
+        Mockito.verify(mockedClientThread1).closeServerConnection();
+        Mockito.verify(mockedClientThread2).closeServerConnection();
+    }
 
-	@Test
-	public void addErrorEqualsNameTest() {
-		Mockito.when(mockedClientThread1.getOwner()).thenReturn(new UserDto("TestName", UserStatus.ONLINE));
-		Mockito.when(mockedClientThread2.getOwner()).thenReturn(new UserDto("TestName", UserStatus.ONLINE));
-		holder.add(mockedClientThread1);
-		holder.add(mockedClientThread2);
+    @Test
+    public void sendMessageToAllTest() throws Exception {
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
+        Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
 
-		assertEquals(1, holder.size());
-		Mockito.verify(mockedClientThread2).onInvalidNameError();
-	}
+        holder.add(mockedClientThread1);
+        holder.add(mockedClientThread2);
+        MessageDto message = new MessageDto();
+        holder.sendMessageToAll(message);
 
-	@Test
-	public void removeAllTest() throws Exception {
-		Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
-		Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
+        Mockito.verify(mockedClientThread1).sendMessage(message);
+        Mockito.verify(mockedClientThread2).sendMessage(message);
+    }
 
-		holder.add(mockedClientThread1);
-		holder.add(mockedClientThread2);
-		holder.removeAll();
-		assertEquals(0, holder.size());
+    @Test
+    public void getOnlineUsersTest() throws Exception {
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
+        Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
 
-		Mockito.verify(mockedClientThread1).closeServerConnection();
-		Mockito.verify(mockedClientThread2).closeServerConnection();
-	}
+        holder.add(mockedClientThread1);
+        holder.add(mockedClientThread2);
+        UsersListDto onlineUsers = holder.getOnlineUsers();
 
-	@Test
-	public void sendMessageToAllTest() throws Exception {
-		Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
-		Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
+        assertEquals(new UsersListDto(testUser1, testUser2), onlineUsers);
+    }
 
-		holder.add(mockedClientThread1);
-		holder.add(mockedClientThread2);
-		MessageDto message = new MessageDto();
-		holder.sendMessageToAll(message);
+    @Test
+    public void sendOnlineListToAll() throws Exception {
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
+        Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
 
-		Mockito.verify(mockedClientThread1).sendMessage(message);
-		Mockito.verify(mockedClientThread2).sendMessage(message);
-	}
+        holder.add(mockedClientThread1);
+        holder.add(mockedClientThread2);
+        holder.sendOnlineListToAll();
+        UsersListDto onlineUsers = holder.getOnlineUsers();
 
-	@Test
-	public void getOnlineUsersTest() throws Exception {
-		Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
-		Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
+        Mockito.verify(mockedClientThread1).sendOnlineUserList(onlineUsers);
+        Mockito.verify(mockedClientThread2).sendOnlineUserList(onlineUsers);
+    }
 
-		holder.add(mockedClientThread1);
-		holder.add(mockedClientThread2);
-		UsersListDto onlineUsers = holder.getOnlineUsers();
-
-		assertEquals(new UsersListDto(testUser1, testUser2), onlineUsers);
-	}
-
-	@Test
-	public void sendOnlineListToAll() throws Exception {
-		Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
-		Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
-
-		holder.add(mockedClientThread1);
-		holder.add(mockedClientThread2);
-		holder.sendOnlineListToAll();
-		UsersListDto onlineUsers = holder.getOnlineUsers();
-
-		Mockito.verify(mockedClientThread1).sendOnlineUserList(onlineUsers);
-		Mockito.verify(mockedClientThread2).sendOnlineUserList(onlineUsers);
-	}
-	
-	@Test
+    @Test
     public void removeUserTest() throws Exception {
         Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
         Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
@@ -150,10 +143,10 @@ public class ClientThreadsHolderTest {
         assertEquals(1, holder.size());
         Mockito.verify(mockedClientThread1).closeServerConnection();
     }
-	
-	@Test
+
+    @Test
     public void removeUserNoUserName() throws Exception {
-	    Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
+        Mockito.when(mockedClientThread1.getOwner()).thenReturn(testUser1);
         Mockito.when(mockedClientThread2.getOwner()).thenReturn(testUser2);
         holder.add(mockedClientThread1);
         holder.add(mockedClientThread2);

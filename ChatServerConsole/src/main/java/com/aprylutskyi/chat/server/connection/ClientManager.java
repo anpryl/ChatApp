@@ -1,21 +1,16 @@
 package com.aprylutskyi.chat.server.connection;
 
+import com.aprylutskyi.chat.server.connection.holders.ClientThreadsHolder;
+import com.aprylutskyi.chat.server.connection.holders.MessageHistoryHolder;
+import com.aprylutskyi.chat.server.dto.*;
+import com.aprylutskyi.chat.server.util.Closer;
+import com.aprylutskyi.chat.server.util.TimeHelper;
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.channels.AlreadyBoundException;
-
-import org.apache.log4j.Logger;
-
-import com.aprylutskyi.chat.server.connection.holders.ClientThreadsHolder;
-import com.aprylutskyi.chat.server.connection.holders.MessageHistoryHolder;
-import com.aprylutskyi.chat.server.dto.ConfigurationDto;
-import com.aprylutskyi.chat.server.dto.MessageDto;
-import com.aprylutskyi.chat.server.dto.MessagesListDto;
-import com.aprylutskyi.chat.server.dto.UserDto;
-import com.aprylutskyi.chat.server.dto.UsersListDto;
-import com.aprylutskyi.chat.server.util.Closer;
-import com.aprylutskyi.chat.server.util.TimeHelper;
 
 public class ClientManager implements Runnable {
 

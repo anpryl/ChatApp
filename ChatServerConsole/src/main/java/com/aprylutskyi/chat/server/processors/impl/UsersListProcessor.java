@@ -1,14 +1,13 @@
 package com.aprylutskyi.chat.server.processors.impl;
 
-import static com.aprylutskyi.chat.server.constants.DataConstants.ONLINE_USERS_TAG;
-
-import java.io.Reader;
-
-import org.apache.log4j.Logger;
-
 import com.aprylutskyi.chat.server.dto.UsersListDto;
 import com.aprylutskyi.chat.server.processors.DataProcessor;
 import com.aprylutskyi.chat.server.processors.format.JAXBProcessor;
+import org.apache.log4j.Logger;
+
+import java.io.Reader;
+
+import static com.aprylutskyi.chat.server.constants.DataConstants.ONLINE_USERS_TAG;
 
 public class UsersListProcessor extends JAXBProcessor<UsersListDto> implements DataProcessor {
 

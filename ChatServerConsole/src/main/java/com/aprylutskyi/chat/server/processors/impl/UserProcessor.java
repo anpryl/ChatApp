@@ -1,19 +1,17 @@
 package com.aprylutskyi.chat.server.processors.impl;
 
-import static com.aprylutskyi.chat.server.constants.DataConstants.USER_TAG;
-
-import java.io.Reader;
-
-import javax.xml.bind.JAXBException;
-
-import org.apache.log4j.Logger;
-
 import com.aprylutskyi.chat.server.connection.ClientThread;
 import com.aprylutskyi.chat.server.constants.UserStatus;
 import com.aprylutskyi.chat.server.dto.UserDto;
 import com.aprylutskyi.chat.server.exceptions.InvalidDataFormatException;
 import com.aprylutskyi.chat.server.processors.DataProcessor;
 import com.aprylutskyi.chat.server.processors.format.JAXBProcessor;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.JAXBException;
+import java.io.Reader;
+
+import static com.aprylutskyi.chat.server.constants.DataConstants.USER_TAG;
 
 public class UserProcessor extends JAXBProcessor<UserDto> implements DataProcessor {
 

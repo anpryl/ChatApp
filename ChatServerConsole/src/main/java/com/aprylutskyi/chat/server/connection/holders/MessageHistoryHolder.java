@@ -1,9 +1,9 @@
 package com.aprylutskyi.chat.server.connection.holders;
 
-import java.util.LinkedList;
-
 import com.aprylutskyi.chat.server.dto.MessageDto;
 import com.aprylutskyi.chat.server.dto.MessagesListDto;
+
+import java.util.LinkedList;
 
 public class MessageHistoryHolder {
 

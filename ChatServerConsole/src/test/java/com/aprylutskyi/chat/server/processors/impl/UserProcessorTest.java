@@ -1,29 +1,20 @@
 package com.aprylutskyi.chat.server.processors.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.StringReader;
-
-import javax.xml.bind.Unmarshaller;
-
+import com.aprylutskyi.chat.server.constants.DataConstants;
+import com.aprylutskyi.chat.server.dto.UserDto;
+import com.aprylutskyi.chat.server.util.JAXBHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.xml.sax.InputSource;
 
-import com.aprylutskyi.chat.server.constants.DataConstants;
-import com.aprylutskyi.chat.server.dto.UserDto;
-import com.aprylutskyi.chat.server.processors.impl.UserProcessor;
-import com.aprylutskyi.chat.server.util.JAXBHelper;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
 
-public class UserProcessorTest extends AbstractProcessorTest{
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class UserProcessorTest extends AbstractProcessorTest {
 
     private final String testDataPathUserOnline = getPathFromClassPath("/testUserOnline.xml");
 
@@ -62,7 +53,7 @@ public class UserProcessorTest extends AbstractProcessorTest{
         DataInputStream dataInputStream = new DataInputStream(inputStreamRaw);
         String testData = dataInputStream.readUTF();
         assertTrue(testData.startsWith(DataConstants.USER_TAG));
-        
+
         testData = testData.replaceFirst(DataConstants.USER_TAG + System.lineSeparator(), "");
         Unmarshaller unmarshaller = JAXBHelper.getJaxbContext().createUnmarshaller();
         UserDto userFromProcessor = (UserDto) unmarshaller.unmarshal(new InputSource(new StringReader(testData)));

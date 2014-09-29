@@ -1,16 +1,15 @@
 package com.aprylutskyi.chat.server.control;
 
+import com.aprylutskyi.chat.server.connection.ClientManager;
+import com.aprylutskyi.chat.server.dto.UserDto;
+import com.aprylutskyi.chat.server.dto.UsersListDto;
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import com.aprylutskyi.chat.server.connection.ClientManager;
-import com.aprylutskyi.chat.server.dto.UserDto;
-import com.aprylutskyi.chat.server.dto.UsersListDto;
 
 public class CommandLineControl implements Runnable {
 

@@ -1,7 +1,12 @@
 package com.aprylutskyi.chat.server.connection;
 
-import static org.junit.Assert.assertEquals;
-
+import com.aprylutskyi.chat.server.configuration.Configurer;
+import com.aprylutskyi.chat.server.connection.holders.ClientThreadsHolder;
+import com.aprylutskyi.chat.server.connection.holders.MessageHistoryHolder;
+import com.aprylutskyi.chat.server.dto.ConfigurationDto;
+import com.aprylutskyi.chat.server.dto.MessageDto;
+import com.aprylutskyi.chat.server.dto.MessagesListDto;
+import com.aprylutskyi.chat.server.dto.UserDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,24 +15,16 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.aprylutskyi.chat.server.configuration.Configurer;
-import com.aprylutskyi.chat.server.connection.ClientManager;
-import com.aprylutskyi.chat.server.connection.ClientThread;
-import com.aprylutskyi.chat.server.connection.holders.ClientThreadsHolder;
-import com.aprylutskyi.chat.server.connection.holders.MessageHistoryHolder;
-import com.aprylutskyi.chat.server.dto.ConfigurationDto;
-import com.aprylutskyi.chat.server.dto.MessageDto;
-import com.aprylutskyi.chat.server.dto.MessagesListDto;
-import com.aprylutskyi.chat.server.dto.UserDto;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ClientThreadsHolder.class, MessageHistoryHolder.class, ClientThread.class })
+@PrepareForTest({ClientThreadsHolder.class, MessageHistoryHolder.class, ClientThread.class})
 public class ClientManagerTest {
 
     protected final ClientThreadsHolder mockedThreadsHolder = PowerMockito.mock(ClientThreadsHolder.class);
 
     protected final MessageHistoryHolder mockedHistoryHolder = PowerMockito.mock(MessageHistoryHolder.class);
-    
+
     protected final ClientThread mockedClientThread = PowerMockito.mock(ClientThread.class);
 
     private final ConfigurationDto configurationDto = new Configurer().getConfig(null);
@@ -35,7 +32,7 @@ public class ClientManagerTest {
     private ClientManager clientManager = new ClientManager(configurationDto);
 
     private final MessageDto testMessage = new MessageDto("Test", "Test", "Test");
-    
+
     private final UserDto owner = new UserDto("OWNER", "ONLINE");
 
     public ClientManagerTest() {
@@ -69,7 +66,7 @@ public class ClientManagerTest {
         Mockito.verify(mockedThreadsHolder).sendMessageToAll(Mockito.any(MessageDto.class));
         Mockito.verify(mockedThreadsHolder).getOnlineUsers();
     }
-    
+
     @Test
     public void removeClientThreadWithOwnerTest() throws Exception {
         Mockito.when(mockedClientThread.getOwner()).thenReturn(owner);

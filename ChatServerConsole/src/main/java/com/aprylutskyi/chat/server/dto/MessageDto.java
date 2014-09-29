@@ -4,10 +4,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "message")
 public class MessageDto implements Processable {
-    
+
     private static final long serialVersionUID = -3403343285880442119L;
-    
-    public MessageDto() {}
+    private String author;
+    private String text;
+    private String date;
+
+    public MessageDto() {
+    }
 
     public MessageDto(String author, String text, String date) {
         this.author = author;
@@ -15,12 +19,6 @@ public class MessageDto implements Processable {
         this.date = date;
     }
 
-    private String author;
-    
-    private String text;
-    
-    private String date;
-    
     public String getText() {
         return text;
     }
@@ -28,7 +26,7 @@ public class MessageDto implements Processable {
     public void setText(String text) {
         this.text = text;
     }
-    
+
     public String getAuthor() {
         return author;
     }
@@ -36,13 +34,13 @@ public class MessageDto implements Processable {
     public void setAuthor(String author) {
         this.author = author;
     }
-    
-    public void setDate(String date) {
-        this.date = date;
-    }
 
     public String getDate() {
         return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override
@@ -86,5 +84,5 @@ public class MessageDto implements Processable {
             return false;
         return true;
     }
-    
+
 }

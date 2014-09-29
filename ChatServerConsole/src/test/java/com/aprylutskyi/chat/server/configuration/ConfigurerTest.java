@@ -1,35 +1,24 @@
 package com.aprylutskyi.chat.server.configuration;
 
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.DEFAULT_LOG_FILE_PATH;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.DEFAULT_MAX_USERS;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.DEFAULT_MESSAGE_HISTORY_SIZE;
-import static com.aprylutskyi.chat.server.constants.ConfigConstants.DEFAULT_PORT;
-import static org.junit.Assert.assertEquals;
-
+import com.aprylutskyi.chat.server.dto.ConfigurationDto;
 import org.junit.Test;
 
-import com.aprylutskyi.chat.server.configuration.Configurer;
-import com.aprylutskyi.chat.server.dto.ConfigurationDto;
+import static com.aprylutskyi.chat.server.constants.ConfigConstants.*;
+import static org.junit.Assert.assertEquals;
 
 public class ConfigurerTest {
-    
-    private final Configurer configurer = new Configurer();
 
     public final int portFromFile = 5000;
-
     public final int maxUsersFromFile = 10;
-
     public final int historySizeFromFile = 10;
-
     public final String logFileNameFromFile = "logs/serverLogsTest.log";
-    
     public final String fileNameWithErrors = getClass().getResource("/settingsWithErrors.properties").getFile();
-
     public final String fileNameWithGoodProps = getClass().getResource("/settingsForTest.properties").getFile();
+    private final Configurer configurer = new Configurer();
 
     @Test
     public void goodPropertiesTest() {
-        
+
         ConfigurationDto config = configurer.getConfig(fileNameWithGoodProps);
         assertEquals(portFromFile, config.getPort());
         assertEquals(maxUsersFromFile, config.getMaxUsers());

@@ -1,27 +1,17 @@
 package com.aprylutskyi.chat.server.processors.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.StringReader;
-
-import javax.xml.bind.Unmarshaller;
-
+import com.aprylutskyi.chat.server.constants.DataConstants;
+import com.aprylutskyi.chat.server.dto.ErrorDto;
+import com.aprylutskyi.chat.server.util.JAXBHelper;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.xml.sax.InputSource;
 
-import com.aprylutskyi.chat.server.constants.DataConstants;
-import com.aprylutskyi.chat.server.dto.ErrorDto;
-import com.aprylutskyi.chat.server.processors.impl.ErrorProcessor;
-import com.aprylutskyi.chat.server.util.JAXBHelper;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ErrorProcessorTest extends AbstractProcessorTest {
 
@@ -30,7 +20,7 @@ public class ErrorProcessorTest extends AbstractProcessorTest {
     private final String testErrorUserLimit = getPathFromClassPath("/testErrorUserLimit.xml");
 
     private final String testErrorOffline = getPathFromClassPath("/testErrorOffline.xml");
-    
+
     private final ErrorProcessor errorProcessor = new ErrorProcessor(mockedClientThread);
 
     @Test
@@ -46,7 +36,7 @@ public class ErrorProcessorTest extends AbstractProcessorTest {
         errorProcessor.processData(reader);
         Mockito.verifyZeroInteractions(mockedClientThread);
     }
-    
+
     @Test
     public void processDataOfflineTest() throws Exception {
         FileReader reader = new FileReader(new File(testErrorOffline));

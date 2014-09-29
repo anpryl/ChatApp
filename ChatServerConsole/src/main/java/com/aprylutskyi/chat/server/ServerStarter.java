@@ -8,7 +8,7 @@ import com.aprylutskyi.chat.server.dto.ConfigurationDto;
 import com.aprylutskyi.chat.server.util.JAXBHelper;
 
 public class ServerStarter {
-    
+
     private String configFilePath;
 
     public void init() {

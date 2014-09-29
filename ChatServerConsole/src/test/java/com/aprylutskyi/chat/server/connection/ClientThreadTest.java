@@ -1,23 +1,8 @@
 package com.aprylutskyi.chat.server.connection;
 
-import static com.aprylutskyi.chat.server.constants.DataConstants.ERROR_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.MESSAGE_HISTORY_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.MESSAGE_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.ONLINE_USERS_TAG;
-import static com.aprylutskyi.chat.server.constants.DataConstants.USER_TAG;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.Reader;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.aprylutskyi.chat.server.dto.*;
+import com.aprylutskyi.chat.server.processors.DataProcessor;
+import com.aprylutskyi.chat.server.util.TimeHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,18 +11,17 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.aprylutskyi.chat.server.connection.ClientManager;
-import com.aprylutskyi.chat.server.connection.ClientThread;
-import com.aprylutskyi.chat.server.dto.ErrorDto;
-import com.aprylutskyi.chat.server.dto.MessageDto;
-import com.aprylutskyi.chat.server.dto.MessagesListDto;
-import com.aprylutskyi.chat.server.dto.UserDto;
-import com.aprylutskyi.chat.server.dto.UsersListDto;
-import com.aprylutskyi.chat.server.processors.DataProcessor;
-import com.aprylutskyi.chat.server.util.TimeHelper;
+import java.io.*;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.aprylutskyi.chat.server.constants.DataConstants.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ ClientManager.class, Socket.class, DataProcessor.class })
+@PrepareForTest({ClientManager.class, Socket.class, DataProcessor.class})
 public class ClientThreadTest {
 
     private final ClientManager mockedClientManager = PowerMockito.mock(ClientManager.class);
@@ -102,7 +86,7 @@ public class ClientThreadTest {
     @Test
     public void initialConnectionClientManagerTest() throws Exception {
         Mockito.when(mockedClientManager.addClientThread(clientThread)).thenReturn(true);
-        
+
         clientThread.initialConnection(testOwner);
         Mockito.verify(mockedClientManager).getMessageHistory();
         Mockito.verify(mockedClientManager).getOnlineUserListFor(testOwner);
@@ -114,12 +98,12 @@ public class ClientThreadTest {
         Mockito.when(mockedClientManager.addClientThread(clientThread)).thenReturn(true);
         Mockito.when(mockedClientManager.getMessageHistory()).thenReturn(testMessages);
         Mockito.when(mockedClientManager.getOnlineUserListFor(testOwner)).thenReturn(testUsers);
-        
+
         clientThread.initialConnection(testOwner);
         Mockito.verify(mockedMessagesListProcessor, Mockito.times(1)).sendData(testMessages, null);
         Mockito.verify(mockedUsersListProcessor, Mockito.times(1)).sendData(testUsers, null);
     }
-    
+
     @Test
     public void sendMessageTest() {
         clientThread.sendMessage(testMessage1);
