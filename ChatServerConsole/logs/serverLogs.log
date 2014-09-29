@@ -1,0 +1,7 @@
+2014-08-28 23:06:34 ERROR Configurer:93 - Invalid "max.users" value in settings.properties file! Using default value
+2014-08-28 23:06:34 ERROR Configurer:78 - Invalid "history.size" value in settings.properties file! Using default value
+2014-08-28 23:06:34 ERROR Configurer:66 - Invalid "port" value in settings.properties file! Using default value
+2014-08-28 23:06:34 INFO  Configurer:37 - Server configuration ended
+2014-08-28 23:06:34 INFO  Configurer:38 - Server configuration: [port=3000, maxUsers=5, messageHistorySize=5, logFilePath=logs/serverLogs.log]
+2014-08-28 23:06:34 INFO  ClientManager:44 - Server started: ServerSocket[addr=0.0.0.0/0.0.0.0,localport=3000]
+2014-08-28 23:07:01 INFO  ClientManager:55 - Closing server
