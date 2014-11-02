@@ -50,11 +50,6 @@ public class UserProcessor extends JAXBProcessor<UserDto> implements DataProcess
     }
 
     @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    @Override
     public String getDataTag() {
         return USER_TAG;
     }

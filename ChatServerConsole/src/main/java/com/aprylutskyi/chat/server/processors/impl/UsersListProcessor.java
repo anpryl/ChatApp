@@ -24,11 +24,6 @@ public class UsersListProcessor extends JAXBProcessor<UsersListDto> implements D
     }
 
     @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    @Override
     public String getDataTag() {
         return ONLINE_USERS_TAG;
     }

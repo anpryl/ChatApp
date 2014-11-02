@@ -16,33 +16,33 @@ import java.io.StringWriter;
 
 public abstract class JAXBProcessor<T> implements DataProcessor {
 
+    private final Logger LOGGER = Logger.getLogger(JAXBProcessor.class);
+
     private Unmarshaller unmarshaller;
 
     private Marshaller marshaller;
 
     public abstract boolean isCorrectType(Object message);
 
-    public abstract Logger getLogger();
-
     public abstract String getDataTag();
 
     @Override
     public void sendData(Processable data, DataOutputStream outbound) {
         try {
-            getLogger().info("Sending data: " + data);
+            LOGGER.info("Sending data: " + data);
             StringWriter writerForMarhaller = new StringWriter();
             marshallObject(data, writerForMarhaller);
             String outputData = getDataTag() + System.lineSeparator() + writerForMarhaller.toString();
             outbound.writeUTF(outputData);
             outbound.flush();
         } catch (JAXBException e) {
-            getLogger().error("Error occurred when marshaling message object");
-            getLogger().debug(e.getMessage());
+            LOGGER.error("Error occurred when marshaling message object");
+            LOGGER.debug(e.getMessage());
         } catch (IOException e) {
-            getLogger().error("Can't write data into stream");
-            getLogger().debug(e.getMessage());
+            LOGGER.error("Can't write data into stream");
+            LOGGER.debug(e.getMessage());
         } catch (InvalidDataFormatException e) {
-            getLogger().error("Invalid data format for this processor");
+            LOGGER.error("Invalid data format for this processor");
         }
     }
 

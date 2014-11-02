@@ -46,8 +46,6 @@ public class ErrorProcessor extends JAXBProcessor<ErrorDto> implements DataProce
     public boolean isCorrectType(Object message) {
         return (message instanceof ErrorDto);
     }
-
-    @Override
     public Logger getLogger() {
         return LOGGER;
     }

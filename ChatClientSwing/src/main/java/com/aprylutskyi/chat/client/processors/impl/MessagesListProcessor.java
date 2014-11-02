@@ -50,11 +50,6 @@ public class MessagesListProcessor extends JAXBProcessor<MessagesListDto> implem
     }
 
     @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    @Override
     public String getDataTag() {
         return MESSAGE_HISTORY_TAG;
     }

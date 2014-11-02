@@ -44,11 +44,6 @@ public class ErrorProcessor extends JAXBProcessor<ErrorDto> implements DataProce
     }
 
     @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    @Override
     public String getDataTag() {
         return ERROR_TAG;
     }

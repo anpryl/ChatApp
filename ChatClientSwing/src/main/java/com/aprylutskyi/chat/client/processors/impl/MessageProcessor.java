@@ -43,11 +43,6 @@ public class MessageProcessor extends JAXBProcessor<MessageDto> implements DataP
     }
 
     @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    @Override
     public String getDataTag() {
         return MESSAGE_TAG;
     }
